@@ -1,5 +1,5 @@
 import * as React from "react";
-import { GalleryVerticalEnd, Minus, Plus } from "lucide-react";
+import { FlameIcon, GalleryVerticalEnd, HomeIcon, Minus, Plus, TrendingUpIcon } from "lucide-react";
 import ReddishLogo from "@/images/Reddish Full.png";
 
 import { SearchForm } from "@/components/search-form";
@@ -85,6 +85,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               {/* <CreateCommunityButton /> */ }
+            </SidebarMenuButton>
+
+            <SidebarMenuButton asChild className="p-5">
+              <Link href="/">
+                <HomeIcon className="w-4 h-4 mr-2" />
+                Home
+              </Link>
+            </SidebarMenuButton>
+            <SidebarMenuButton asChild className="p-5">
+              <Link href="/popular">
+                <TrendingUpIcon className="w-4 h-4 mr-2" />
+                Popular
+              </Link>
+            </SidebarMenuButton>
+            <SidebarMenuButton asChild className="p-5">
+              <Link href="/hot">
+                <FlameIcon className="w-4 h-4 mr-2" />
+                Hot/Controversial
+              </Link>
             </SidebarMenuButton>
 
           </SidebarMenuItem>
