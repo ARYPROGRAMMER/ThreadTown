@@ -80,6 +80,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SearchForm />
       </SidebarHeader>
       <SidebarContent>
+      <SidebarGroup>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              {/* <CreateCommunityButton /> */ }
+            </SidebarMenuButton>
+
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
+
         <SidebarGroup>
           <SidebarMenu>
             {sidebarData.navMain.map((item, index) => (
@@ -117,6 +129,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             ))}
           </SidebarMenu>
         </SidebarGroup>
+
+
+
+
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
