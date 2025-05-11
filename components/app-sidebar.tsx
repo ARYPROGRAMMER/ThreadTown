@@ -1,13 +1,12 @@
-import * as React from "react";
+import ReddishLogo from "@/images/Reddish Full.png";
 import {
   FlameIcon,
-  GalleryVerticalEnd,
   HomeIcon,
   Minus,
   Plus,
-  TrendingUpIcon,
+  TrendingUpIcon
 } from "lucide-react";
-import ReddishLogo from "@/images/Reddish Full.png";
+import * as React from "react";
 
 import { SearchForm } from "@/components/search-form";
 import {
@@ -28,9 +27,10 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import Link from "next/link";
-import Image from "next/image";
 import { getSubreddits } from "@/sanity/lib/subreddits/getSubreddits";
+import Image from "next/image";
+import Link from "next/link";
+import CreateCommunityButton from "./header/CreateCommunityButton";
 
 type SidebarData = {
   navMain: {
@@ -55,8 +55,8 @@ export async function AppSidebar({
       {
         title: "Communities",
         url: "#",
-        items: subreddits.map((subreddit: any) => ({
-          title: subreddit.title || "",
+        items: subreddits.map((subreddit) => ({
+          title: subreddit.title || "TITLE UNKNOWN",
           url: `/community/${subreddit.slug}`,
           isActive: false
         }))
@@ -89,7 +89,7 @@ export async function AppSidebar({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton asChild>
-                {/* <CreateCommunityButton /> */}
+                <CreateCommunityButton />
               </SidebarMenuButton>
 
               <SidebarMenuButton asChild className="p-5">
@@ -139,7 +139,7 @@ export async function AppSidebar({
                               asChild
                               isActive={item.isActive}
                             >
-                              <a href={item.url}>{item.title}</a>
+                              <Link href={item.url}>{item.title}</Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}

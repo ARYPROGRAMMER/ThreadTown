@@ -8,12 +8,12 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import React from "react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import ReddishLogo from "@/images/Reddish Full.png";
 import ReddishLogoOnly from "@/images/Reddish Logo Only.png";
 import Image from "next/image";
 import { ChevronLeftIcon, MenuIcon } from "lucide-react";
-import { useSidebar } from "./ui/sidebar";
+import { useSidebar } from "../ui/sidebar";
 
 function Header() {
   const { user } = useUser();

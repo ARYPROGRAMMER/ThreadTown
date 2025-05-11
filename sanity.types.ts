@@ -291,6 +291,18 @@ export type User = {
 
 export type AllSanitySchemaTypes = SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityFileAsset | Geopoint | Vote | Comment | Post | Subreddit | SanityImageCrop | SanityImageHotspot | SanityImageAsset | SanityAssetSourceData | SanityImageMetadata | Slug | User;
 export declare const internalGroqTypeReferenceTo: unique symbol;
+// Source: ./sanity/lib/subreddits/createSubreddit.ts
+// Variable: checkExistingQuery
+// Query: *[_type == "subreddit" && title == $name][0] {          _id        }
+export type CheckExistingQueryResult = {
+  _id: string;
+} | null;
+// Variable: checkSlugQuery
+// Query: *[_type == "subreddit" && slug.current == $slug][0] {            _id          }
+export type CheckSlugQueryResult = {
+  _id: string;
+} | null;
+
 // Source: ./sanity/lib/subreddits/getSubreddits.ts
 // Variable: getSubredditQuery
 // Query: *[_type == "subreddit"] {        ...,        "slug": slug.current,        "moderator": moderator->,        } | order(createdAt desc)
@@ -331,10 +343,29 @@ export type GetSubredditQueryResult = Array<{
   createdAt?: string;
 }>;
 
+// Source: ./sanity/lib/user/getUser.ts
+// Variable: getExistingUserQuery
+// Query: *[_type == "user" && _id == $id][0]
+export type GetExistingUserQueryResult = {
+  _id: string;
+  _type: "user";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  username?: string;
+  email?: string;
+  imageUrl?: string;
+  joinedAt?: string;
+  isReported?: boolean;
+} | null;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
+    "\n        *[_type == \"subreddit\" && title == $name][0] {\n          _id\n        }\n      ": CheckExistingQueryResult;
+    "\n          *[_type == \"subreddit\" && slug.current == $slug][0] {\n            _id\n          }\n        ": CheckSlugQueryResult;
     "*[_type == \"subreddit\"] {\n        ...,\n        \"slug\": slug.current,\n        \"moderator\": moderator->,\n        } | order(createdAt desc)": GetSubredditQueryResult;
+    "*[_type == \"user\" && _id == $id][0]": GetExistingUserQueryResult;
   }
 }
