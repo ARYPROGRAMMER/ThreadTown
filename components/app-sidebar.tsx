@@ -1,5 +1,12 @@
 import * as React from "react";
-import { FlameIcon, GalleryVerticalEnd, HomeIcon, Minus, Plus, TrendingUpIcon } from "lucide-react";
+import {
+  FlameIcon,
+  GalleryVerticalEnd,
+  HomeIcon,
+  Minus,
+  Plus,
+  TrendingUpIcon,
+} from "lucide-react";
 import ReddishLogo from "@/images/Reddish Full.png";
 
 import { SearchForm } from "@/components/search-form";
@@ -23,6 +30,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import Image from "next/image";
+import { getSubreddits } from "@/sanity/lib/subreddits/getSubreddits";
 
 type SidebarData = {
   navMain: {
@@ -37,28 +45,25 @@ type SidebarData = {
   }[];
 };
 
-const sidebarData : SidebarData = {
-  navMain: [
-    {
-      title: "Communities",
-      url: "#",
-      items: [
-        {
-          title: "Installation",
-          url: "#",
-          isActive: false
-        },
-        {
-          title: "Project Structure",
-          url: "#",
-          isActive: false
-        },
-      ],
-    },
-  ],
-};
+export async function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>) {
+  const subreddits = await getSubreddits();
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const sidebarData: SidebarData = {
+    navMain: [
+      {
+        title: "Communities",
+        url: "#",
+        items: subreddits.map((subreddit: any) => ({
+          title: subreddit.title || "",
+          url: `/community/${subreddit.slug}`,
+          isActive: false
+        }))
+      },
+    ],
+  };
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -80,36 +85,34 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SearchForm />
       </SidebarHeader>
       <SidebarContent>
-      <SidebarGroup>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              {/* <CreateCommunityButton /> */ }
-            </SidebarMenuButton>
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                {/* <CreateCommunityButton /> */}
+              </SidebarMenuButton>
 
-            <SidebarMenuButton asChild className="p-5">
-              <Link href="/">
-                <HomeIcon className="w-4 h-4 mr-2" />
-                Home
-              </Link>
-            </SidebarMenuButton>
-            <SidebarMenuButton asChild className="p-5">
-              <Link href="/popular">
-                <TrendingUpIcon className="w-4 h-4 mr-2" />
-                Popular
-              </Link>
-            </SidebarMenuButton>
-            <SidebarMenuButton asChild className="p-5">
-              <Link href="/hot">
-                <FlameIcon className="w-4 h-4 mr-2" />
-                Hot/Controversial
-              </Link>
-            </SidebarMenuButton>
-
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarGroup>
-
+              <SidebarMenuButton asChild className="p-5">
+                <Link href="/">
+                  <HomeIcon className="w-4 h-4 mr-2" />
+                  Home
+                </Link>
+              </SidebarMenuButton>
+              <SidebarMenuButton asChild className="p-5">
+                <Link href="/popular">
+                  <TrendingUpIcon className="w-4 h-4 mr-2" />
+                  Popular
+                </Link>
+              </SidebarMenuButton>
+              <SidebarMenuButton asChild className="p-5">
+                <Link href="/hot">
+                  <FlameIcon className="w-4 h-4 mr-2" />
+                  Hot/Controversial
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
 
         <SidebarGroup>
           <SidebarMenu>
@@ -148,10 +151,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             ))}
           </SidebarMenu>
         </SidebarGroup>
-
-
-
-
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
