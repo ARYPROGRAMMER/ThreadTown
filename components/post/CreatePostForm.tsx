@@ -10,6 +10,7 @@ import Image from "next/image";
 import { Textarea } from "@/components/ui/textarea";
 import { createPost } from "@/action/createPost";
 
+
 function CreatePostForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState("");

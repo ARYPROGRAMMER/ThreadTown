@@ -2,14 +2,15 @@
 
 import { Post } from "@/sanity.types";
 import { adminClient } from "@/sanity/lib/adminClient";
-import { getSubredditBySlug } from "@/sanity/lib/subreddit/getSubredditBySlug";
+
 import { getUser } from "@/sanity/lib/user/getUser";
 import { auth } from "@clerk/nextjs/server";
-import { CoreMessage, generateText } from "ai";
-import { createClerkToolkit } from "@clerk/agent-toolkit/ai-sdk";
-import { openai } from "@ai-sdk/openai";
-import { censorPost, reportUser } from "@/tools/tools";
-import { systemPrompt } from "@/tools/prompt";
+// import { CoreMessage, generateText } from "ai";
+// import { createClerkToolkit } from "@clerk/agent-toolkit/ai-sdk";
+// import { openai } from "@ai-sdk/openai";
+// import { censorPost, reportUser } from "@/tools/tools";
+// import { systemPrompt } from "@/tools/prompt";
+import { getSubredditBySlug } from "@/sanity/lib/subreddits/getSubredditBySlug";
 
 export type PostImageData = {
   base64: string;
@@ -64,15 +65,13 @@ export async function createPost({
       console.log(`Image base64 length: ${imageBase64.length} characters`);
       try {
         console.log("Processing image data...");
-        // Extract base64 data (remove data:image/jpeg;base64, part)
+
         const base64Data = imageBase64.split(",")[1];
         console.log(`Extracted base64 data (${base64Data.length} characters)`);
 
-        // Convert base64 to buffer
         const buffer = Buffer.from(base64Data, "base64");
         console.log(`Converted to buffer (size: ${buffer.length} bytes)`);
 
-        // Upload to Sanity
         console.log(`Uploading image to Sanity: ${imageFilename}`);
         imageAsset = await adminClient.assets.upload("image", buffer, {
           filename: imageFilename,
@@ -82,13 +81,12 @@ export async function createPost({
       } catch (error) {
         console.error("Error uploading image:", error);
         console.log("Will continue post creation without image");
-        // Continue without image if upload fails
+
       }
     } else {
       console.log("No image provided with post");
     }
 
-    // Create the post
     console.log("Preparing post document");
     const postDoc: Partial<Post> = {
       _type: "post",
@@ -119,7 +117,7 @@ export async function createPost({
       publishedAt: new Date().toISOString(),
     };
 
-    // Add image if available
+
     if (imageAsset) {
       console.log(`Adding image reference to post: ${imageAsset._id}`);
       postDoc.image = {
@@ -139,39 +137,35 @@ export async function createPost({
     // ----- MOD STEP ----
     // TODO: Implement content moderation API call
 
-    console.log("Starting content moderation process");
-    const messages: CoreMessage[] = [
-      {
-        role: "user",
-        content: `I posted this post -> Post ID: ${post._id}\nTitle: ${title}\nBody: ${body}`,
-      },
-    ];
+    // console.log("Starting content moderation process");
+    // const messages: CoreMessage[] = [
+    //   {
+    //     role: "user",
+    //     content: `I posted this post -> Post ID: ${post._id}\nTitle: ${title}\nBody: ${body}`,
+    //   },
+    // ];
 
-    console.log("Prepared messages for moderation:", JSON.stringify(messages));
+    // console.log("Prepared messages for moderation:", JSON.stringify(messages));
 
-    try {
-      const authContext = await auth.protect();
-      const toolkit = await createClerkToolkit({ authContext });
-      const result = await generateText({
-        model: openai("gpt-4.1-mini"),
-        messages: messages as CoreMessage[],
-        // Conditionally inject session claims if we have auth context
-        system: toolkit.injectSessionClaims(systemPrompt),
-        tools: {
-          ...toolkit.users(),
-          censorPost,
-          reportUser,
-        },
-      });
+    // try {
+    //   const authContext = await auth.protect();
+    //   const toolkit = await createClerkToolkit({ authContext });
+    //   const result = await generateText({
+    //     model: openai("gpt-4.1-mini"),
+    //     messages: messages as CoreMessage[],
+    //     system: toolkit.injectSessionClaims(systemPrompt),
+    //     tools: {
+    //       ...toolkit.users(),
+    //       censorPost,
+    //       reportUser,
+    //     },
+    //   });
 
-      console.log("AI moderation completed successfully", result);
-    } catch (error) {
-      console.error("Error in content moderation:", error);
-      // Don't fail the whole post creation if moderation fails
-      console.log("Continuing without content moderation");
-    }
-
-    // ----- END MOD STEP ----
+    //   console.log("AI moderation completed successfully", result);
+    // } catch (error) {
+    //   console.error("Error in content moderation:", error);
+    //   console.log("Continuing without content moderation");
+    // }
 
     console.log("Post creation process completed successfully", post);
 
