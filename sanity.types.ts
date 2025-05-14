@@ -461,6 +461,141 @@ export type CheckSlugQueryResult = {
   _id: string;
 } | null;
 
+// Source: ./sanity/lib/subreddits/getPostsForSubreddit.ts
+// Variable: getPostsForSubredditQuery
+// Query: *[_type == "post" && subreddit._ref == $id] {        ...,        "slug": slug.current,        "author": author->,        "subreddit": subreddit->,        "category": category->,        "upvotes": count(*[_type == "vote" && post._ref == ^._id && voteType == "upvote"]),        "downvotes": count(*[_type == "vote" && post._ref == ^._id && voteType == "downvote"]),        "netScore": count(*[_type == "vote" && post._ref == ^._id && voteType == "upvote"]) - count(*[_type == "vote" && post._ref == ^._id && voteType == "downvote"]),        "commentCount": count(*[_type == "comment" && post._ref == ^._id])      } | order(publishedAt desc)
+export type GetPostsForSubredditQueryResult = Array<{
+  _id: string;
+  _type: "post";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  originalTitle?: string;
+  author: {
+    _id: string;
+    _type: "user";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    username?: string;
+    email?: string;
+    imageUrl?: string;
+    joinedAt?: string;
+    isReported?: boolean;
+  } | null;
+  subreddit: {
+    _id: string;
+    _type: "subreddit";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    title?: string;
+    description?: string;
+    slug?: Slug;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+    };
+    moderator?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "user";
+    };
+    createdAt?: string;
+  } | null;
+  body?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "normal";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      href?: string;
+      _type: "link";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  }>;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  isReported?: boolean;
+  publishedAt?: string;
+  isDeleted?: boolean;
+  slug: null;
+  category: null;
+  upvotes: number;
+  downvotes: number;
+  netScore: number;
+  commentCount: number;
+}>;
+
+// Source: ./sanity/lib/subreddits/getSubredditBySlug.ts
+// Variable: getSubredditBySlugQuery
+// Query: *[_type == "subreddit" && slug.current == $slug][0] {        ...,        "slug": slug.current,        "moderator": moderator->,        }
+export type GetSubredditBySlugQueryResult = {
+  _id: string;
+  _type: "subreddit";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  description?: string;
+  slug: string | null;
+  image?: {
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+  };
+  moderator: {
+    _id: string;
+    _type: "user";
+    _createdAt: string;
+    _updatedAt: string;
+    _rev: string;
+    username?: string;
+    email?: string;
+    imageUrl?: string;
+    joinedAt?: string;
+    isReported?: boolean;
+  } | null;
+  createdAt?: string;
+} | null;
+
 // Source: ./sanity/lib/subreddits/getSubreddits.ts
 // Variable: getSubredditQuery
 // Query: *[_type == "subreddit"] {        ...,        "slug": slug.current,        "moderator": moderator->,        } | order(createdAt desc)
@@ -773,6 +908,8 @@ declare module "@sanity/client" {
     "*[_type == \"post\" && isDeleted != true] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    body,\n    publishedAt,\n    \"author\": author->\n    ,\n    \"subreddit\": subreddit->,\n    image,\n    isDeleted\n  } | order(publishedAt desc)": GetAllPostsQueryResult;
     "\n        *[_type == \"subreddit\" && title == $name][0] {\n          _id\n        }\n      ": CheckExistingQueryResult;
     "\n          *[_type == \"subreddit\" && slug.current == $slug][0] {\n            _id\n          }\n        ": CheckSlugQueryResult;
+    "\n      *[_type == \"post\" && subreddit._ref == $id] {\n        ...,\n        \"slug\": slug.current,\n        \"author\": author->,\n        \"subreddit\": subreddit->,\n        \"category\": category->,\n        \"upvotes\": count(*[_type == \"vote\" && post._ref == ^._id && voteType == \"upvote\"]),\n        \"downvotes\": count(*[_type == \"vote\" && post._ref == ^._id && voteType == \"downvote\"]),\n        \"netScore\": count(*[_type == \"vote\" && post._ref == ^._id && voteType == \"upvote\"]) - count(*[_type == \"vote\" && post._ref == ^._id && voteType == \"downvote\"]),\n        \"commentCount\": count(*[_type == \"comment\" && post._ref == ^._id])\n      } | order(publishedAt desc) \n    ": GetPostsForSubredditQueryResult;
+    "*[_type == \"subreddit\" && slug.current == $slug][0] {\n        ...,\n        \"slug\": slug.current,\n        \"moderator\": moderator->,\n        }": GetSubredditBySlugQueryResult;
     "*[_type == \"subreddit\"] {\n        ...,\n        \"slug\": slug.current,\n        \"moderator\": moderator->,\n        } | order(createdAt desc)": GetSubredditQueryResult;
     "*[_type == \"subreddit\" && title match $searchTerm + \"*\"] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    image,\n    \"moderator\": moderator->,\n    createdAt\n  } | order(createdAt desc)": SearchSubredditsQueryResult;
     "*[_type == \"user\" && _id == $id][0]": GetExistingUserQueryResult;

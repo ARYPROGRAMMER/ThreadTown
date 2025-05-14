@@ -1,4 +1,7 @@
-import { GetAllPostsQueryResult } from "@/sanity.types";
+import {
+  GetAllPostsQueryResult,
+  GetPostsForSubredditQueryResult,
+} from "@/sanity.types";
 import React from "react";
 import TimeAgo from "../TimeAgo";
 import Image from "next/image";
@@ -12,16 +15,17 @@ import CommentList from "../comments/CommentList";
 import PostVoteButtons from "./PostVoteButtons";
 
 interface PostProps {
-  post: GetAllPostsQueryResult[number];
+  post:
+    | GetAllPostsQueryResult[number]
+    | GetPostsForSubredditQueryResult[number];
   userId: string | null;
 }
 
 async function Post({ post, userId }: PostProps) {
-
   const votes = await getPostVotes(post._id);
   const vote = await getUserPostVoteStatus(post._id, userId);
-  const comments = await getPostComments(post._id,userId);
-  
+  const comments = await getPostComments(post._id, userId);
+
   return (
     <article
       key={post._id}
@@ -93,8 +97,8 @@ async function Post({ post, userId }: PostProps) {
             <span>{comments.length} Comments</span>
           </button>
 
-           <CommentInput postId={post._id} />
-          <CommentList postId={post._id} comments={comments} userId={userId} /> 
+          <CommentInput postId={post._id} />
+          <CommentList postId={post._id} comments={comments} userId={userId} />
         </div>
       </div>
       {/* 

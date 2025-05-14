@@ -14,6 +14,7 @@ import ReddishLogoOnly from "@/images/Reddish Logo Only.png";
 import Image from "next/image";
 import { ChevronLeftIcon, MenuIcon } from "lucide-react";
 import { useSidebar } from "../ui/sidebar";
+import CreatePost from "../post/CreatePost";
 
 function Header() {
   const { user } = useUser();
@@ -27,8 +28,6 @@ function Header() {
     p-4 border-b border-gray-200
     "
     >
-      {/* Left */}
-
       <div className="flex items-center h-10">
         {open && !isMobile ? (
           <ChevronLeftIcon className="w-6 h-6" onClick={toggleSidebar} />
@@ -53,7 +52,10 @@ function Header() {
         )}
       </div>
 
-      <div>
+      <div className="flex items-center gap-2">
+
+        <CreatePost />
+
         <SignedIn>
           <UserButton />
         </SignedIn>
