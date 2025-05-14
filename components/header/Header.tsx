@@ -15,6 +15,7 @@ import Image from "next/image";
 import { ChevronLeftIcon, MenuIcon } from "lucide-react";
 import { useSidebar } from "../ui/sidebar";
 import CreatePost from "../post/CreatePost";
+import { ModeToggle } from "../theme-toggle";
 
 function Header() {
   const { user } = useUser();
@@ -65,6 +66,7 @@ function Header() {
             <SignInButton mode="modal" />
           </Button>
         </SignedOut>
+        <ModeToggle />
       </div>
     </header>
   );

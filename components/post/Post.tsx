@@ -14,6 +14,7 @@ import CommentInput from "../comments/CommentInput";
 import CommentList from "../comments/CommentList";
 import PostVoteButtons from "./PostVoteButtons";
 import ReportButton from "../ReportButton";
+import DeleteButton from "../DeleteButton";
 
 interface PostProps {
   post:
@@ -107,13 +108,13 @@ async function Post({ post, userId }: PostProps) {
         <div className="flex items-center gap-2">
           <ReportButton contentId={post._id} />
 
-          {/* {post.author?._id && (
+          {post.author?._id && (
             <DeleteButton
               contentOwnerId={post.author?._id}
               contentId={post._id}
               contentType="post"
             />
-          )} */}
+          )}
         </div>
       </div>
     </article>
