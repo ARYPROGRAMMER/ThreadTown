@@ -558,7 +558,7 @@ export type GetPostsForSubredditQueryResult = Array<{
 
 // Source: ./sanity/lib/subreddits/getSubredditBySlug.ts
 // Variable: getSubredditBySlugQuery
-// Query: *[_type == "subreddit" && slug.current == $slug][0] {        ...,        "slug": slug.current,        "moderator": moderator->,        }
+// Query: *[_type == "subreddit" && slug.current == $slug][0] {      ...,      "slug": slug.current,      "moderator": moderator->,    }
 export type GetSubredditBySlugQueryResult = {
   _id: string;
   _type: "subreddit";
@@ -909,7 +909,7 @@ declare module "@sanity/client" {
     "\n        *[_type == \"subreddit\" && title == $name][0] {\n          _id\n        }\n      ": CheckExistingQueryResult;
     "\n          *[_type == \"subreddit\" && slug.current == $slug][0] {\n            _id\n          }\n        ": CheckSlugQueryResult;
     "\n      *[_type == \"post\" && subreddit._ref == $id] {\n        ...,\n        \"slug\": slug.current,\n        \"author\": author->,\n        \"subreddit\": subreddit->,\n        \"category\": category->,\n        \"upvotes\": count(*[_type == \"vote\" && post._ref == ^._id && voteType == \"upvote\"]),\n        \"downvotes\": count(*[_type == \"vote\" && post._ref == ^._id && voteType == \"downvote\"]),\n        \"netScore\": count(*[_type == \"vote\" && post._ref == ^._id && voteType == \"upvote\"]) - count(*[_type == \"vote\" && post._ref == ^._id && voteType == \"downvote\"]),\n        \"commentCount\": count(*[_type == \"comment\" && post._ref == ^._id])\n      } | order(publishedAt desc) \n    ": GetPostsForSubredditQueryResult;
-    "*[_type == \"subreddit\" && slug.current == $slug][0] {\n        ...,\n        \"slug\": slug.current,\n        \"moderator\": moderator->,\n        }": GetSubredditBySlugQueryResult;
+    "*[_type == \"subreddit\" && slug.current == $slug][0] {\n      ...,\n      \"slug\": slug.current,\n      \"moderator\": moderator->,\n    }": GetSubredditBySlugQueryResult;
     "*[_type == \"subreddit\"] {\n        ...,\n        \"slug\": slug.current,\n        \"moderator\": moderator->,\n        } | order(createdAt desc)": GetSubredditQueryResult;
     "*[_type == \"subreddit\" && title match $searchTerm + \"*\"] {\n    _id,\n    title,\n    \"slug\": slug.current,\n    description,\n    image,\n    \"moderator\": moderator->,\n    createdAt\n  } | order(createdAt desc)": SearchSubredditsQueryResult;
     "*[_type == \"user\" && _id == $id][0]": GetExistingUserQueryResult;

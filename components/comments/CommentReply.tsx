@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import CommentInput from "./CommentInput";
 import { MessageCircle } from "lucide-react";
+import ReportButton from "../ReportButton";
 
 function CommentReply({
   postId,
@@ -31,8 +32,8 @@ function CommentReply({
           {isReplying ? "Cancel" : isSignedIn ? "Reply" : "Sign in to reply"}
         </button>
 
-        {/* <ReportButton contentId={comment._id} />
-
+        <ReportButton contentId={comment._id} />
+{/*
         {comment.author?._id && (
           <DeleteButton
             contentOwnerId={comment.author?._id}

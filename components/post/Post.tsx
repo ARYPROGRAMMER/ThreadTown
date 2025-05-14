@@ -13,6 +13,7 @@ import { getPostComments } from "@/sanity/lib/votes/gePostComments";
 import CommentInput from "../comments/CommentInput";
 import CommentList from "../comments/CommentList";
 import PostVoteButtons from "./PostVoteButtons";
+import ReportButton from "../ReportButton";
 
 interface PostProps {
   post:
@@ -101,20 +102,20 @@ async function Post({ post, userId }: PostProps) {
           <CommentList postId={post._id} comments={comments} userId={userId} />
         </div>
       </div>
-      {/* 
+      
       <div className="absolute top-2 right-2">
         <div className="flex items-center gap-2">
           <ReportButton contentId={post._id} />
 
-          {post.author?._id && (
+          {/* {post.author?._id && (
             <DeleteButton
               contentOwnerId={post.author?._id}
               contentId={post._id}
               contentType="post"
             />
-          )}
+          )} */}
         </div>
-      </div> */}
+      </div>
     </article>
   );
 }
