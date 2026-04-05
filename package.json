@@ -34,7 +34,7 @@
     "cmdk": "^1.1.1",
     "groq": "^3.88.2",
     "lucide-react": "^0.503.0",
-    "next": "15.3.1",
+    "next": "15.3.8",
     "next-sanity": "^9.10.6",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
